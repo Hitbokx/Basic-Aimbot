@@ -2,8 +2,6 @@
 #include <Windows.h>
 #include <cmath>
 
-void aimAt( Vector3* target );
-
 LocalPlayer* LocalPlayer::Get( )
 {
 	static uintptr_t cModuleBase{ (uintptr_t)GetModuleHandle( L"client.dll" ) };
@@ -40,3 +38,13 @@ float LocalPlayer::getDistance( Vector3* other )
 	return sqrt( delta.x * delta.x + delta.y * delta.y + delta.z * delta.z );
 }
 
+void LocalPlayer::aimAt( Vector3* target )
+{
+	static uintptr_t eModuleBase{ (uintptr_t)GetModuleHandle( L"engine.dll" ) };
+	static Vector3 viewAngles{ (Vector3*)(*(uintptr_t*)eModuleBase + offsets.ViewAnglesW) };
+
+	Vector3 origin{ *getOrigin( ) };
+	Vector3 viewOffset{ *getViewOffset( ) };
+
+	Vector3* mypos{ &(origin + viewOffset) };
+}
