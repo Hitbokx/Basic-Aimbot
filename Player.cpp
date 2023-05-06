@@ -37,13 +37,13 @@ int* Player::getTeam( )
 
 Vector3* Player::GetBonePos( int boneID )
 {
-	float* boneMatrix{ this->pBoneMatrix[boneID]->matrix };
-
 	static Vector3 bonePos{};
 
-	bonePos.x = boneMatrix[3];
-	bonePos.y = boneMatrix[7];
-	bonePos.z = boneMatrix[11];
+	auto boneArrayAccess{ this->pBoneMatrix };
+
+	bonePos.x = (*boneArrayAccess)[35].matrix[3];
+	bonePos.y = (*boneArrayAccess)[35].matrix[7];
+	bonePos.z = (*boneArrayAccess)[35].matrix[11];
 
 	return &bonePos;
 }

@@ -45,7 +45,7 @@ float LocalPlayer::getDistance( Vector3 other )
 void LocalPlayer::aimAt( Vector3* target )
 {
 	static uintptr_t eModuleBase{ (uintptr_t)GetModuleHandle( L"engine.dll" ) };
-	static Vector3* viewAngles{ (Vector3*)(*(uintptr_t*)eModuleBase + offsets.ViewAnglesW) };
+	static Vector3* viewAngles{ (Vector3*)(eModuleBase + offsets.ViewAnglesW) };
 
 	Vector3 origin{ *getOrigin( ) };
 	Vector3 viewOffset{ *getViewOffset( ) };

@@ -3,20 +3,6 @@
 #include "Player.h"
 #include "LocalPlayer.h"
 
-Vector3* GetBonePos( int boneID, PlayerEnt* player )
-{
-
-	static Vector3 bonePos{};
-
-	auto boneArrayAccess{ player->pBoneMatrix };
-
-	bonePos.x = (*boneArrayAccess)[35].matrix[3];
-	bonePos.y = (*boneArrayAccess)[35].matrix[7];
-	bonePos.z = (*boneArrayAccess)[35].matrix[11];
-
-	return &bonePos;
-}
-
 Player* getClosestEnemy( )
 {
 	LocalPlayer* localPlayer{ LocalPlayer::Get( ) };
@@ -30,7 +16,7 @@ Player* getClosestEnemy( )
 	{
 		Player* currPlayer{ Player::GetPlayer( i ) };
 
-		if ( (!currPlayer) || (!(*(uintptr_t*)currPlayer)) || ((uintptr_t)currPlayer == (uintptr_t)localPlayer) )
+		if ( (!currPlayer) || (!(*(uintptr_t*)currPlayer)) || ((uintptr_t)currPlayer == (uintptr_t)localPlayer) || currPlayer->bDormant)
 			continue;
 
 		if ( currPlayer->team == *(localPlayer->getTeam()) )
