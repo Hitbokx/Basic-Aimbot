@@ -10,20 +10,29 @@ Player* getClosestEnemy( )
 	float closestDistance{ 1000000 };
 	int closestDistanceIndex{ -1 };
 
-	for ( int i{ 1 }; i < *Player::getMaxPlayer( ); ++i )
+	int numPlayers{ *(Player::getMaxPlayer( )) };
+
+	for ( int i{ 1 }; i < numPlayers; ++i )
 	{
 		Player* currPlayer{ Player::GetPlayer( i ) };
 
-		if ( !currPlayer || !(*(uintptr_t*)currPlayer) || (uintptr_t)currPlayer == (uintptr_t)localPlayer )
+		if ( (!currPlayer) || (!(*(uintptr_t*)currPlayer)) || ((uintptr_t)currPlayer == (uintptr_t)localPlayer) )
 			continue;
 
-		if ( *currPlayer->getTeam( ) == *localPlayer->getTeam( ) )
+		int entTeam{ *(currPlayer->getTeam( )) };
+		int localPlayerTeam{ *(localPlayer->getTeam( )) };
+
+		if ( entTeam == localPlayerTeam )
 			continue;
 
-		if ( *currPlayer->getHealth( ) < 1 || *localPlayer->getHealth( ) < 1 )
+		int* entHealth{ currPlayer->getHealth( ) };
+		int localPlayerHealth{ (*localPlayer->getHealth( )) };
+
+		if ( *entHealth < 1 || localPlayerHealth < 1 );
 			continue;
 
-		float currDistance{ localPlayer->getDistance( currPlayer->getOrigin( ) ) };
+			Vector3* entOrigin{ currPlayer->getOrigin( ) };
+			float currDistance{ localPlayer->getDistance( entOrigin ) };
 
 		if ( currDistance < closestDistance )
 		{
@@ -32,9 +41,9 @@ Player* getClosestEnemy( )
 		}
 	}
 
-		if ( closestDistanceIndex == -1 )
-			return NULL;
-
+	if ( closestDistanceIndex == -1 )
+		return NULL;
+	else
 		return Player::GetPlayer( closestDistanceIndex );
 }
 

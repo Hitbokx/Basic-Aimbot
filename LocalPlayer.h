@@ -1,7 +1,7 @@
 #pragma once
 #include "Classes.h"
 
-class LocalPlayer
+class LocalPlayer :public PlayerEnt
 {
 private:
 
