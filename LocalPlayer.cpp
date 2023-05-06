@@ -30,10 +30,12 @@ int* LocalPlayer::getTeam( )
 	return (int*)(*(uintptr_t*)this + offsets.team);
 }
 
-float LocalPlayer::getDistance( Vector3* other )
+float LocalPlayer::getDistance( Vector3 other )
 {
-	Vector3* myPos{ getOrigin( ) };
-	Vector3 delta{ Vector3( other->x - myPos->x,other->y - myPos->y, other->z - myPos->z ) };
+	LocalPlayer* localPlayer{ LocalPlayer::Get( ) };
+
+	Vector3* myPos{ localPlayer->getOrigin( ) };
+	Vector3 delta{ Vector3( other.x - myPos->x, other.y - myPos->y, other.z - myPos->z ) };
 
 	return sqrt( delta.x * delta.x + delta.y * delta.y + delta.z * delta.z );
 }
@@ -55,7 +57,7 @@ void LocalPlayer::aimAt( Vector3* target )
 	float deltaVecLength{ sqrt( deltaVec.x * deltaVec.x + deltaVec.y * deltaVec.y + deltaVec.z * deltaVec.z ) };
 
 	float pitch{ -(asin( deltaVec.z / deltaVecLength ) * (180 / PI)) };
-	float yaw{ atan2( deltaVec.y,deltaVec.x ) * (180 / PI) };
+	float yaw{ atan2( deltaVec.y, deltaVec.x ) * (180 / PI) };
 
 	if ( pitch >= -89 && pitch <= 89 && yaw >= -180 && yaw <= 180 )
 	{

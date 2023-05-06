@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <Windows.h>
+#include "Vector.h"
 
 #define NUM_ENT_ENTRY_BITS		(MAX_EDICT_BITS + 1)
 #define NUM_ENT_ENTRIES			(1 << NUM_ENT_ENTRY_BITS)
@@ -28,45 +29,6 @@ protected:
 	unsigned long	m_Index;
 };
 
-class Vector3
-{
-public:
-
-	float x{};
-	float y{};
-	float z{};
-
-	Vector3( )
-	{
-		x = y = z = 0;
-	}
-
-	Vector3( float x, float y, float z )
-	{
-		this->x = x;
-		this->y = y;
-		this->z = z;
-	}
-
-	Vector3& operator+( Vector3 arg )
-	{
-		x += arg.x;
-		y += arg.y;
-		z += arg.z;
-
-		return *this;
-	}
-
-	Vector3& operator-( Vector3 arg )
-	{
-		x -= arg.x;
-		y -= arg.y;
-		z -= arg.z;
-
-		return *this;
-	}
-};
-
 class PlayerEnt
 {
 public:
@@ -84,13 +46,16 @@ public:
 	Vector3 velocity; //0x0120
 	char pad_012C[126]; //0x012C
 	bool bDormant; //0x01AA
-	char pad_01AB[237]; //0x01AB
+	char pad_01AB[225]; //0x01AB
+	Vector3 playerCoordinates; //0x028C
 	Vector3 viewAngles; //0x0298
-	char pad_02A4[192]; //0x02A4
-	Vector3 playerCoordinates; //0x0364
-	char pad_0370[12]; //0x0370
-	uint32_t flag; //0x037C
-	char pad_0380[660]; //0x0380
+	char pad_02A4[208]; //0x02A4
+	Vector3 playerCoordinates2; //0x0374
+	char pad_0380[12]; //0x0380
+	uint32_t flag; //0x038C
+	char pad_0390[544]; //0x0390
+	Matrix3x4( *pBoneMatrix )[128]; //0x05B0
+	char pad_05B4[96]; //0x05B4
 	int32_t flag2; //0x0614
 	char pad_0618[760]; //0x0618
 	Vector3 gunCrossHair; //0x0910
@@ -168,7 +133,7 @@ struct offsets_t
 	uintptr_t team{ 0x00B0 }; //
 //	uintptr_t viewAngles{ 0x0298 }; //
 	uintptr_t vecViewOffset{ 0x00FC }; //
-	uintptr_t vecOrigin{ 0x038C }; //
+	uintptr_t vecOrigin{ 0x028C }; //
 	uintptr_t boneMatrix{ 0x05B0 };
 };
 

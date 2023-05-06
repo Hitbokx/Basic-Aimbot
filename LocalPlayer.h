@@ -17,5 +17,5 @@ public:
 	int* getHealth( );
 	int* getTeam( );
 	void aimAt( Vector3* target );
-	float getDistance( Vector3* );
+	float getDistance( Vector3 );
 };

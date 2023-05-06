@@ -3,6 +3,20 @@
 #include "Player.h"
 #include "LocalPlayer.h"
 
+Vector3* GetBonePos( int boneID, PlayerEnt* player )
+{
+
+	static Vector3 bonePos{};
+
+	auto boneArrayAccess{ player->pBoneMatrix };
+
+	bonePos.x = (*boneArrayAccess)[35].matrix[3];
+	bonePos.y = (*boneArrayAccess)[35].matrix[7];
+	bonePos.z = (*boneArrayAccess)[35].matrix[11];
+
+	return &bonePos;
+}
+
 Player* getClosestEnemy( )
 {
 	LocalPlayer* localPlayer{ LocalPlayer::Get( ) };
@@ -19,20 +33,13 @@ Player* getClosestEnemy( )
 		if ( (!currPlayer) || (!(*(uintptr_t*)currPlayer)) || ((uintptr_t)currPlayer == (uintptr_t)localPlayer) )
 			continue;
 
-		int entTeam{ *(currPlayer->getTeam( )) };
-		int localPlayerTeam{ *(localPlayer->getTeam( )) };
-
-		if ( entTeam == localPlayerTeam )
+		if ( currPlayer->team == *(localPlayer->getTeam()) )
 			continue;
 
-		int* entHealth{ currPlayer->getHealth( ) };
-		int localPlayerHealth{ (*localPlayer->getHealth( )) };
-
-		if ( *entHealth < 1 || localPlayerHealth < 1 );
+		if ( currPlayer->health < 1 || *(localPlayer->getHealth( )) < 1 )
 			continue;
 
-			Vector3* entOrigin{ currPlayer->getOrigin( ) };
-			float currDistance{ localPlayer->getDistance( entOrigin ) };
+		float currDistance{ localPlayer->getDistance( currPlayer->playerCoordinates ) };
 
 		if ( currDistance < closestDistance )
 		{
@@ -51,8 +58,11 @@ void Run( )
 {
 	Player* closestEnemy{ getClosestEnemy( ) };
 
+	LocalPlayer* localPlayer{ LocalPlayer::Get( ) };
+
 	if ( closestEnemy )
 	{
-		LocalPlayer::Get( )->aimAt( closestEnemy->GetBonePos( 35 ) );
+		Vector3* bonePos{ closestEnemy->GetBonePos( 35 ) };
+		localPlayer->aimAt( bonePos );
 	}
 }
